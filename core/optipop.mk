@@ -297,7 +297,12 @@ ifeq ($(FLOOP_NEST_OPTIMIZE),true)
 LOCAL_ENABLE_NEST := \
 	art \
 	libsigchain \
+	libart \
+	libart-compiler \
+	libartd \
+	libartd-compiler \
 	libart-disassembler \
+	libartd-disassembler \
 	core.art-host \
 	core.art \
 	cpplint-art-phony \
@@ -326,7 +331,7 @@ LOCAL_ENABLE_NEST := \
 	libm \
 	tzdata \
 	bionic-benchmarks
-	
+
 ifeq (1,$(words $(filter $(LOCAL_ENABLE_NEST), $(LOCAL_MODULE))))
 ifdef LOCAL_CONLYFLAGS
 LOCAL_CONLYFLAGS += \
