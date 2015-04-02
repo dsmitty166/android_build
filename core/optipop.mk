@@ -103,7 +103,19 @@ LOCAL_DISABLE_STRICT := \
 	oatdump \
 	libart-disassembler \
 	linker \
-	camera.msm8084
+	camera.msm8084 \
+        libstlport_static \
+        libcrypto_static \
+        libfuse \
+        libbusybox \
+        libstagefright_webm \
+        ssh \
+        libssh \
+        clatd \
+        gatt_testtool \
+        libOmxVenc \
+        lsof \
+        tcpdump
 
 LOCAL_FORCE_DISABLE_STRICT := \
 	libziparchive-host \
@@ -113,7 +125,10 @@ LOCAL_FORCE_DISABLE_STRICT := \
 	libdiskconfig \
 	logd \
 	libjavacore \
-	camera.msm8084
+	camera.msm8084 \
+        gatt_testtool \
+        libstagefright_webm \
+        clatd
 
 ifeq (1,$(words $(filter $(LOCAL_FORCE_DISABLE_STRICT),$(LOCAL_MODULE))))
 ifdef LOCAL_CONLYFLAGS
