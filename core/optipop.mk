@@ -380,7 +380,11 @@ LOCAL_DISABLE_GRAPHITE := \
 	fio \
 	libwebrtc_spl \
 	libpcap \
-	libFraunhoferAAC
+	libFraunhoferAAC \
+        libncurses \
+        hwcomposer.msm8974 \
+        libavformat \
+        libavcodec
 
 ifneq (1,$(words $(filter $(LOCAL_DISABLE_GRAPHITE), $(LOCAL_MODULE))))
 ifdef LOCAL_CONLYFLAGS
