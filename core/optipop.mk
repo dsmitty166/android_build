@@ -119,8 +119,6 @@ LOCAL_DISABLE_STRICT := \
 
 LOCAL_FORCE_DISABLE_STRICT := \
 	libziparchive-host \
-        libc_bionic \
-        libc_dns \
 	libziparchive \
 	libdiskconfig \
 	logd \
