@@ -85,11 +85,6 @@ $(info   USE_O3_OPTIMIZATIONS=$(USE_O3_OPTIMIZATIONS))
 else
 $(info   USE_O3_OPTIMIZATIONS=false)
 endif
-ifdef    TARGET_USE_PIPE
-$(info   TARGET_USE_PIPE=$(TARGET_USE_PIPE))
-else
-$(info   TARGET_USE_PIPE=false)
-endif
 ifdef    STRICT_ALIASING
 $(info   STRICT_ALIASING=$(STRICT_ALIASING))
 else
@@ -100,20 +95,10 @@ $(info   KRAIT_TUNINGS=$(KRAIT_TUNINGS))
 else
 $(info   KRAIT_TUNINGS=fasle)
 endif
-ifdef    FFAST_MATH
-$(info   FFAST_MATH=$(FFAST_MATH))
-else
-$(info   FFAST_MATH=false)
-endif
 ifdef    ENABLE_GCCONLY
 $(info   ENABLE_GCCONLY=$(ENABLE_GCCONLY))
 else
 $(info   ENABLE_GCCONLY=false)
-endif
-ifdef    FLOOP_NEST_OPTIMIZE
-$(info   FLOOP_NEST_OPTIMIZE=$(FLOOP_NEST_OPTIMIZE))
-else
-$(info   FLOOP_NEST_OPTIMIZE=false)
 endif
 ifdef    GRAPHITE_OPTS
 $(info   GRAPHITE_OPTS=$(GRAPHITE_OPTS))
