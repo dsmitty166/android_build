@@ -105,7 +105,7 @@ LOCAL_FORCE_DISABLE_STRICT := \
 DISABLE_STRICT := \
 	-fno-strict-aliasing
 
-STRICT_ALIASING := \
+STRICT_ALIASING_FLAGS := \
 	-fstrict-aliasing \
 	-Werror=strict-aliasing
 
