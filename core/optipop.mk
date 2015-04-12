@@ -13,35 +13,9 @@
 # limitations under the License.
 #
 
-# TARGET_USE_PIPE
-ifeq ($(TARGET_USE_PIPE),true)
-LOCAL_DISABLE_PIPE := \
-	libc_dns \
-	libc_tzcode \
-	bluetooth.default
-
-ifneq (1,$(words $(filter $(LOCAL_DISABLE_PIPE), $(LOCAL_MODULE))))
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += \
-	-pipe
-else
-LOCAL_CONLYFLAGS := \
-	-pipe
-endif
-
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS += \
-	-pipe
-else
-LOCAL_CPPFLAGS := \
-	-pipe
-endif
-endif
-endif
-#####
-
-# STRICT_ALIASING
-ifeq ($(STRICT_ALIASING),true)
+################
+#Strict Aliasing
+################
 LOCAL_DISABLE_STRICT := \
 	libc_bionic \
 	libc_dns \
@@ -101,20 +75,34 @@ LOCAL_DISABLE_STRICT := \
 	libart \
 	libart-compiler \
 	oatdump \
-	libart-disassembler
+	libart-disassembler \
+	linker \
+	camera.msm8084 \
+        libstlport_static \
+        libcrypto_static \
+        libfuse \
+        libbusybox \
+        libstagefright_webm \
+        ssh \
+        libssh \
+        clatd \
+        gatt_testtool \
+        libOmxVenc \
+        lsof \
+        tcpdump
 
 LOCAL_FORCE_DISABLE_STRICT := \
 	libziparchive-host \
-        libc_bionic \
-        libc_dns \
 	libziparchive \
 	libdiskconfig \
 	logd \
-	libjavacore
+	libjavacore \
+	camera.msm8084 \
+        gatt_testtool \
+        libstagefright_webm \
+        clatd
 
-ifeq (1,$(words $(filter $(LOCAL_FORCE_DISABLE_STRICT),$(LOCAL_MODULE))))
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += \
+DISABLE_STRICT := \
 	-fno-strict-aliasing
 else
 LOCAL_CONLYFLAGS := \
@@ -129,9 +117,7 @@ LOCAL_CPPFLAGS := \
 endif
 endif
 
-ifneq (1,$(words $(filter $(LOCAL_DISABLE_STRICT),$(LOCAL_MODULE))))
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += \
+STRICT_ALIASING := \
 	-fstrict-aliasing \
 	-Werror=strict-aliasing
 else
@@ -140,22 +126,10 @@ LOCAL_CONLYFLAGS := \
 	-Werror=strict-aliasing
 endif
 
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS += \
-	-fstrict-aliasing \
-	-Werror=strict-aliasing
-else
-LOCAL_CPPFLAGS := \
-	-fstrict-aliasing \
-	-Werror=strict-aliasing
-endif
-ifndef LOCAL_CLANG
-LOCAL_CONLYFLAGS += \
+STRICT_GCC_LEVEL := \
 	-Wstrict-aliasing=3
-LOCAL_CPPFLAGS += \
-	-Wstrict-aliasing=3
-else
-LOCAL_CONLYFLAGS += \
+
+STRICT_CLANG_LEVEL := \
 	-Wstrict-aliasing=2
 LOCAL_CPPFLAGS += \
 	-Wstrict-aliasing=2
@@ -163,28 +137,9 @@ endif
 endif
 else
 
-ifeq (1,$(words $(filter $(LOCAL_FORCE_DISABLE_STRICT),$(LOCAL_MODULE))))
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += \
-	-fno-strict-aliasing
-else
-LOCAL_CONLYFLAGS := \
-	-fno-strict-aliasing
-endif
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS += \
-	-fno-strict-aliasing
-else
-LOCAL_CPPFLAGS := \
-	-fno-strict-aliasing
-endif
-endif
-endif
-#####
-
-# KRAIT_TUNINGS
-ifeq ($(KRAIT_TUNINGS),true)
-ifndef LOCAL_IS_HOST_MODULE
+###############
+# Krait Tunings
+###############
 LOCAL_DISABLE_KRAIT := \
 	libc_dns \
 	libc_tzcode \
@@ -296,7 +251,12 @@ ifeq ($(FLOOP_NEST_OPTIMIZE),true)
 LOCAL_ENABLE_NEST := \
 	art \
 	libsigchain \
+	libart \
+	libart-compiler \
+	libartd \
+	libartd-compiler \
 	libart-disassembler \
+	libartd-disassembler \
 	core.art-host \
 	core.art \
 	cpplint-art-phony \
@@ -325,7 +285,7 @@ LOCAL_ENABLE_NEST := \
 	libm \
 	tzdata \
 	bionic-benchmarks
-	
+
 ifeq (1,$(words $(filter $(LOCAL_ENABLE_NEST), $(LOCAL_MODULE))))
 ifdef LOCAL_CONLYFLAGS
 LOCAL_CONLYFLAGS += \
@@ -370,12 +330,19 @@ LOCAL_DISABLE_GRAPHITE := \
 	libwebviewchromium_plat_support \
 	libjni_filtershow_filters \
 	fio \
-	libwebrtc_spl
+	libwebrtc_spl \
+	libpcap \
+	libFraunhoferAAC \
+        libncurses \
+        hwcomposer.msm8974 \
+        libavformat \
+        libavcodec
 
 ifneq (1,$(words $(filter $(LOCAL_DISABLE_GRAPHITE), $(LOCAL_MODULE))))
 ifdef LOCAL_CONLYFLAGS
 LOCAL_CONLYFLAGS += \
 	-fgraphite \
+	-fgraphite-identity \
 	-floop-flatten \
 	-floop-parallelize-all \
 	-ftree-loop-linear \
@@ -385,6 +352,7 @@ LOCAL_CONLYFLAGS += \
 else
 LOCAL_CONLYFLAGS := \
 	-fgraphite \
+	-fgraphite-identity \
 	-floop-flatten \
 	-floop-parallelize-all \
 	-ftree-loop-linear \
@@ -396,6 +364,7 @@ endif
 ifdef LOCAL_CPPFLAGS
 LOCAL_CPPFLAGS += \
 	-fgraphite \
+	-fgraphite-identity \
 	-floop-flatten \
 	-floop-parallelize-all \
 	-ftree-loop-linear \
@@ -405,6 +374,7 @@ LOCAL_CPPFLAGS += \
 else
 LOCAL_CPPFLAGS := \
 	-fgraphite \
+	-fgraphite-identity \
 	-floop-flatten \
 	-floop-parallelize-all \
 	-ftree-loop-linear \
@@ -414,6 +384,78 @@ LOCAL_CPPFLAGS := \
 endif
 endif
 endif
+endif
+endif
+#####
+####################
+# FORCE FFAST-MATH #
+####################
+ifeq ($(FFAST_MATH),true)
+LOCAL_FORCE_FFAST_MATH := \
+	libskia \
+	libGLESv2 \
+	libEGL \
+	libGLESv1_CM \
+	libGLES_android \
+	skia_skia_gyp \
+	ui_gfx_gfx_gyp \
+	ui_gfx_ipc_gfx_ipc_gyp \
+	ui_gl_gl_gyp \
+	libui \
+	libgui \
+	ui_base_ui_base_gyp \
+	ui_gfx_gfx_geometry_gyp \
+	third_party_WebKit_Source_core_webcore_rendering_gyp \
+	third_party_WebKit_Source_core_webcore_svg_gyp \
+	third_party_WebKit_Source_core_webcore_generated_gyp \
+	third_party_WebKit_Source_core_webcore_html_gyp \
+	third_party_WebKit_Source_core_webcore_remaining_gy \
+	third_party_WebKit_Source_web_blink_web_gyp \
+	gpu_gl_in_process_context \
+	cc_cc_gyp
+
+LOCAL_DISABLE_SINGLE_PRECISION :=
+
+#########
+# To Try#
+#########
+
+#        libstagefright_color_conversion \
+#        libstagefright_aacenc \
+#        libstagefright_matroska \
+#        libstagefright_webm \
+#        libstagefright_timedtext \
+#        libvpx \
+#        libwebm \
+#        libstagefright_mpeg2ts \
+#        libstagefright_id3 \
+#        libFLAC \
+#        libmedia_helper
+#        skia_skia_gyp
+#    	ui_gfx_gfx_gyp \
+#		ui_gfx_gfx_geometry_gyp \
+#       ui_gfx_ipc_gfx_ipc_gyp
+#
+
+ifneq ($(filter $(LOCAL_FORCE_FFAST_MATH), $(LOCAL_MODULE)),)
+ifdef LOCAL_CONLYFLAGS
+LOCAL_CONLYFLAGS += -ffast-math -ftree-vectorize
+else
+LOCAL_CONLYFLAGS := -ffast-math -ftree-vectorize
+endif
+
+ifdef LOCAL_CPPFLAGS
+LOCAL_CPPFLAGS +=  -ffast-math -ftree-vectorize
+else
+LOCAL_CPPFLAGS :=  -ffast-math -ftree-vectorize
+endif
+
+### Some modules doesn't like forcing single precision, until we fix casting errors, let's disable this optimization
+ifeq ($(filter $(LOCAL_DISABLE_SINGLE_PRECISION), $(LOCAL_MODULE)),)
+LOCAL_CONLYFLAGS += -fsingle-precision-constant
+LOCAL_CPPFLAGS   += -fsingle-precision-constant
+endif
+
 endif
 endif
 #####
