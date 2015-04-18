@@ -89,7 +89,8 @@ LOCAL_DISABLE_STRICT := \
         gatt_testtool \
         libOmxVenc \
         lsof \
-        tcpdump
+        tcpdump \
+        mm-vdec-omx-test 
 
 LOCAL_FORCE_DISABLE_STRICT := \
 	libziparchive-host \
@@ -104,38 +105,16 @@ LOCAL_FORCE_DISABLE_STRICT := \
 
 DISABLE_STRICT := \
 	-fno-strict-aliasing
-else
-LOCAL_CONLYFLAGS := \
-	-fno-strict-aliasing
-endif
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS += \
-	-fno-strict-aliasing
-else
-LOCAL_CPPFLAGS := \
-	-fno-strict-aliasing
-endif
-endif
 
-STRICT_ALIASING := \
+STRICT_ALIASING_FLAGS := \
 	-fstrict-aliasing \
 	-Werror=strict-aliasing
-else
-LOCAL_CONLYFLAGS := \
-	-fstrict-aliasing \
-	-Werror=strict-aliasing
-endif
 
 STRICT_GCC_LEVEL := \
 	-Wstrict-aliasing=3
 
 STRICT_CLANG_LEVEL := \
 	-Wstrict-aliasing=2
-LOCAL_CPPFLAGS += \
-	-Wstrict-aliasing=2
-endif
-endif
-else
 
 ###############
 # Krait Tunings
@@ -148,40 +127,21 @@ LOCAL_DISABLE_KRAIT := \
 	libwebviewchromium_loader \
 	libwebviewchromium_plat_support
 
-ifneq (1,$(words $(filter $(LOCAL_DISABLE_KRAIT), $(LOCAL_MODULE))))
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += -mcpu=cortex-a15 \
+KRAIT_FLAGS := \
+	-mcpu=cortex-a15 \
 	-mtune=cortex-a15
-else
-LOCAL_CONLYFLAGS := -mcpu=cortex-a15 \
-	-mtune=cortex-a15
-endif
 
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS += -mcpu=cortex-a15 \
-	-mtune=cortex-a15
-else
-LOCAL_CPPFLAGS := -mcpu=cortex-a15 \
-	-mtune=cortex-a15
-endif
-endif
-endif
-endif
-#####
-
-# ENABLE_GCCONLY
-ifeq ($(ENABLE_GCCONLY),true)
-ifndef LOCAL_IS_HOST_MODULE
-ifeq ($(LOCAL_CLANG),)
+#############
+# GCC Tunings
+#############
 LOCAL_DISABLE_GCCONLY := \
 	bluetooth.default \
 	libwebviewchromium \
 	libwebviewchromium_loader \
 	libwebviewchromium_plat_support
 
-ifneq (1,$(words $(filter $(LOCAL_DISABLE_GCCONLY), $(LOCAL_MODULE))))
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += -fira-loop-pressure \
+GCC_ONLY := \
+	-fira-loop-pressure \
 	-fforce-addr \
 	-funsafe-loop-optimizations \
 	-funroll-loops \
@@ -195,124 +155,10 @@ LOCAL_CONLYFLAGS += -fira-loop-pressure \
 	-fweb \
 	-ffp-contract=fast \
 	-mvectorize-with-neon-quad
-else
-LOCAL_CONLYFLAGS := -fira-loop-pressure \
-	-fforce-addr \
-	-funsafe-loop-optimizations \
-	-funroll-loops \
-	-ftree-loop-distribution \
-	-fsection-anchors \
-	-ftree-loop-im \
-	-ftree-loop-ivcanon \
-	-ffunction-sections \
-	-fgcse-las \
-	-fgcse-sm \
-	-fweb \
-	-ffp-contract=fast \
-	-mvectorize-with-neon-quad
-endif
 
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS += -fira-loop-pressure \
-	-fforce-addr \
-	-funsafe-loop-optimizations \
-	-funroll-loops \
-	-ftree-loop-distribution \
-	-fsection-anchors \
-	-ftree-loop-im \
-	-ftree-loop-ivcanon \
-	-ffunction-sections \
-	-fgcse-las \
-	-fgcse-sm \
-	-fweb \
-	-ffp-contract=fast \
-	-mvectorize-with-neon-quad
-else
-LOCAL_CPPFLAGS := -fira-loop-pressure \
-	-fforce-addr \
-	-funsafe-loop-optimizations \
-	-funroll-loops \
-	-ftree-loop-distribution \
-	-fsection-anchors \
-	-ftree-loop-im \
-	-ftree-loop-ivcanon \
-	-ffunction-sections \
-	-fgcse-las \
-	-fgcse-sm \
-	-fweb \
-	-ffp-contract=fast \
-	-mvectorize-with-neon-quad
-endif
-endif
-#####
-
-# FLOOP_NEST_OPTIMIZE
-ifeq ($(FLOOP_NEST_OPTIMIZE),true)
-LOCAL_ENABLE_NEST := \
-	art \
-	libsigchain \
-	libart \
-	libart-compiler \
-	libartd \
-	libartd-compiler \
-	libart-disassembler \
-	libartd-disassembler \
-	core.art-host \
-	core.art \
-	cpplint-art-phony \
-	libnativebridgetest \
-	libarttest \
-	art-run-tests \
-	libart-gtest \
-	libc \
-	libc_bionic \
-	libc_gdtoa \
-	libc_netbsd \
-	libc_freebsd \
-	libc_dns \
-	libc_openbsd \
-	libc_cxa \
-	libc_syscalls \
-	libc_aeabi \
-	libc_common \
-	libc_nomalloc \
-	libc_malloc \
-	libc_stack_protector \
-	libc_tzcode \
-	libstdc++ \
-	linker \
-	libdl \
-	libm \
-	tzdata \
-	bionic-benchmarks
-
-ifeq (1,$(words $(filter $(LOCAL_ENABLE_NEST), $(LOCAL_MODULE))))
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += \
-	-floop-nest-optimize
-else
-LOCAL_CONLYFLAGS := \
-	-floop-nest-optimize
-endif
-
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS += \
-	-floop-nest-optimize
-else
-LOCAL_CPPFLAGS := \
-	-floop-nest-optimize
-endif
-endif
-endif
-endif
-endif
-endif
-#####
-
-# GRAPHITE_OPTS
-ifeq ($(GRAPHITE_OPTS),true)
-ifndef LOCAL_IS_HOST_MODULE
-ifeq ($(LOCAL_CLANG),)
+##########
+# GRAPHITE
+##########
 LOCAL_DISABLE_GRAPHITE := \
 	libunwind \
 	libFFTEm \
@@ -338,9 +184,7 @@ LOCAL_DISABLE_GRAPHITE := \
         libavformat \
         libavcodec
 
-ifneq (1,$(words $(filter $(LOCAL_DISABLE_GRAPHITE), $(LOCAL_MODULE))))
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += \
+GRAPHITE_FLAGS := \
 	-fgraphite \
 	-fgraphite-identity \
 	-floop-flatten \
@@ -349,113 +193,3 @@ LOCAL_CONLYFLAGS += \
 	-floop-interchange \
 	-floop-strip-mine \
 	-floop-block
-else
-LOCAL_CONLYFLAGS := \
-	-fgraphite \
-	-fgraphite-identity \
-	-floop-flatten \
-	-floop-parallelize-all \
-	-ftree-loop-linear \
-	-floop-interchange \
-	-floop-strip-mine \
-	-floop-block
-endif
-
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS += \
-	-fgraphite \
-	-fgraphite-identity \
-	-floop-flatten \
-	-floop-parallelize-all \
-	-ftree-loop-linear \
-	-floop-interchange \
-	-floop-strip-mine \
-	-floop-block
-else
-LOCAL_CPPFLAGS := \
-	-fgraphite \
-	-fgraphite-identity \
-	-floop-flatten \
-	-floop-parallelize-all \
-	-ftree-loop-linear \
-	-floop-interchange \
-	-floop-strip-mine \
-	-floop-block
-endif
-endif
-endif
-endif
-endif
-#####
-####################
-# FORCE FFAST-MATH #
-####################
-ifeq ($(FFAST_MATH),true)
-LOCAL_FORCE_FFAST_MATH := \
-	libskia \
-	libGLESv2 \
-	libEGL \
-	libGLESv1_CM \
-	libGLES_android \
-	skia_skia_gyp \
-	ui_gfx_gfx_gyp \
-	ui_gfx_ipc_gfx_ipc_gyp \
-	ui_gl_gl_gyp \
-	libui \
-	libgui \
-	ui_base_ui_base_gyp \
-	ui_gfx_gfx_geometry_gyp \
-	third_party_WebKit_Source_core_webcore_rendering_gyp \
-	third_party_WebKit_Source_core_webcore_svg_gyp \
-	third_party_WebKit_Source_core_webcore_generated_gyp \
-	third_party_WebKit_Source_core_webcore_html_gyp \
-	third_party_WebKit_Source_core_webcore_remaining_gy \
-	third_party_WebKit_Source_web_blink_web_gyp \
-	gpu_gl_in_process_context \
-	cc_cc_gyp
-
-LOCAL_DISABLE_SINGLE_PRECISION :=
-
-#########
-# To Try#
-#########
-
-#        libstagefright_color_conversion \
-#        libstagefright_aacenc \
-#        libstagefright_matroska \
-#        libstagefright_webm \
-#        libstagefright_timedtext \
-#        libvpx \
-#        libwebm \
-#        libstagefright_mpeg2ts \
-#        libstagefright_id3 \
-#        libFLAC \
-#        libmedia_helper
-#        skia_skia_gyp
-#    	ui_gfx_gfx_gyp \
-#		ui_gfx_gfx_geometry_gyp \
-#       ui_gfx_ipc_gfx_ipc_gyp
-#
-
-ifneq ($(filter $(LOCAL_FORCE_FFAST_MATH), $(LOCAL_MODULE)),)
-ifdef LOCAL_CONLYFLAGS
-LOCAL_CONLYFLAGS += -ffast-math -ftree-vectorize
-else
-LOCAL_CONLYFLAGS := -ffast-math -ftree-vectorize
-endif
-
-ifdef LOCAL_CPPFLAGS
-LOCAL_CPPFLAGS +=  -ffast-math -ftree-vectorize
-else
-LOCAL_CPPFLAGS :=  -ffast-math -ftree-vectorize
-endif
-
-### Some modules doesn't like forcing single precision, until we fix casting errors, let's disable this optimization
-ifeq ($(filter $(LOCAL_DISABLE_SINGLE_PRECISION), $(LOCAL_MODULE)),)
-LOCAL_CONLYFLAGS += -fsingle-precision-constant
-LOCAL_CPPFLAGS   += -fsingle-precision-constant
-endif
-
-endif
-endif
-#####
